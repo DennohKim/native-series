@@ -1,23 +1,46 @@
-import { View, Text, Image, TextInput, ScrollView } from "react-native";
-import React, { useLayoutEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Text, Image, TextInput, ScrollView } from 'react-native';
+import React, { useLayoutEffect, useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   ChevronDown,
   User2Icon,
   SearchIcon,
   SlidersHorizontal,
-} from "lucide-react-native";
-import Categories from "../components/Categories";
-import FeaturedRow from "../components/FeaturedRow";
+} from 'lucide-react-native';
+import Categories from '../components/Categories';
+import FeaturedRow from '../components/FeaturedRow';
+import sanityClient from '../sanity';
 
 const HomeScreen = () => {
+  const [featuredCategories, setFeaturedCategories] = useState([]);
+
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
+
+  useEffect(() => {
+    sanityClient.fetch(
+      `*[_type == 'featured']{
+  ...,
+  restaurants[]-> {
+    ...,
+    dishes[]->
+  }
+  
+}
+		
+		`
+    ).then((data) => {
+		setFeaturedCategories(data)
+	});
+  }, []);
+
+  console.log(featuredCategories)
+
   return (
     <SafeAreaView className='bg-white pt-5'>
       <View className='flex-row pb-3 items-center mx-4 space-x-2 px-4'>
