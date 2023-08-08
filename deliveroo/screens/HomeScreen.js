@@ -23,8 +23,9 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
-    sanityClient.fetch(
-      `*[_type == 'featured']{
+    sanityClient
+      .fetch(
+        `*[_type == 'featured']{
   ...,
   restaurants[]-> {
     ...,
@@ -34,12 +35,12 @@ const HomeScreen = () => {
 }
 		
 		`
-    ).then((data) => {
-		setFeaturedCategories(data)
-	});
+      )
+      .then((data) => {
+        setFeaturedCategories(data);
+      });
   }, []);
-
-  console.log(featuredCategories)
+  console.log(featuredCategories);
 
   return (
     <SafeAreaView className='bg-white pt-5'>
@@ -79,21 +80,14 @@ const HomeScreen = () => {
         <Categories />
 
         {/* Featured rows */}
-        <FeaturedRow
-          id='123'
-          title='Featured'
-          description='Paid placement from our partners'
-        />
-        <FeaturedRow
-          id='1234'
-          title='Tasty Discounts'
-          description='Everyone been enjoying these juicy discounts!'
-        />
-        <FeaturedRow
-          id='12345'
-          title='Offers near you'
-          description='Why not support your local restaurant tonight'
-        />
+        {featuredCategories?.map((category) => (
+          <FeaturedRow
+            key={category._id}
+            id={category._id}
+            title={category.name}
+            description={category.short_description}
+          />
+        ))}
 
         {/* categories */}
       </ScrollView>

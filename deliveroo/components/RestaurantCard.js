@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
-import { LocateIcon, MapPin, StarIcon } from 'lucide-react-native';
+import { MapPin, StarIcon } from 'lucide-react-native';
+import { urlFor } from '../sanity';
 
 const RestaurantCard = ({
   id,
@@ -18,7 +19,7 @@ const RestaurantCard = ({
     <TouchableOpacity className='bg-white mr-3 shadow-sm'>
       <Image
         source={{
-          uri: imgUrl,
+          uri: urlFor(imgUrl).width(256).height(144).url(),
         }}
         className='h-36 w-64 rounded-sm  '
       />
